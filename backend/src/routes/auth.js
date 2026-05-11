@@ -17,7 +17,7 @@ const validateLogin = [
 // Public routes
 router.post('/register', validateRegister, authController.register);
 router.post('/login', validateLogin, authController.login);
-router.get('/verify-email/:token', authController.verifyEmail); // GET request works with link
+router.get('/verify-email/:token', authController.verifyEmail);
 router.post('/resend-verification', authController.resendVerification);
 router.post('/forgotpassword', authController.forgotPassword);
 router.put('/resetpassword/:resettoken', authController.resetPassword);

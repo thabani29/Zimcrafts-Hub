@@ -4,7 +4,7 @@ const imagekit = require('../services/imagekitService');
 // @desc    Get ImageKit upload authentication parameters
 // @route   GET /api/imagekit-auth
 // @access  Private (artisan)
-exports.getImageKitAuth = asyncHandler(async (req, res, next) => {
+exports.getImageKitAuth = asyncHandler(async(req, res, next) => {
     const authParams = imagekit.getAuthenticationParameters();
 
     res.json({
