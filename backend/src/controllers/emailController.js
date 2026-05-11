@@ -2,6 +2,7 @@
 const { sendTemplateEmail } = require("../utils/sendEmail");
 const User = require("../models/User");
 const Order = require("../models/Order");
+const { buildPublicAppUrl } = require("../utils/publicUrls");
 
 // ----------------------------------
 // SEND VERIFICATION EMAIL
@@ -11,7 +12,7 @@ exports.sendVerificationEmail = async(user, token) => {
         throw new Error("Missing user or token for verification email");
     }
 
-    const verifyUrl = `${process.env.FRONTEND_URL}/verify-email/${token}`;
+    const verifyUrl = buildPublicAppUrl(`/verify-email/${token}`);
 
     return sendTemplateEmail("verification", user.email, {
         name: user.name,
@@ -174,7 +175,7 @@ exports.sendPasswordResetService = async(user, resetToken) => {
         throw new Error("Missing user or token for password reset email");
     }
 
-    const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    const resetUrl = buildPublicAppUrl(`/reset-password/${resetToken}`);
 
     return sendTemplateEmail("passwordReset", user.email, {
         resetUrl,

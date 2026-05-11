@@ -6,7 +6,9 @@ import LoadingState from "../../components/LoadingState";
 import ProductCard from "../../components/ProductCard";
 import ScreenShell from "../../components/ScreenShell";
 
-export default function ProductListScreen({ navigation }) {
+export default function ProductListScreen({ route, navigation }) {
+  const categoryId = route.params?.category;
+  const categoryName = route.params?.categoryName;
   const [state, setState] = useState({
     loading: true,
     refreshing: false,
@@ -16,12 +18,12 @@ export default function ProductListScreen({ navigation }) {
 
   useEffect(() => {
     loadProducts();
-  }, []);
+  }, [categoryId]);
 
   const loadProducts = async (refreshing = false) => {
     try {
       setState((current) => ({ ...current, loading: !refreshing, refreshing, error: "" }));
-      const response = await client.getProducts({ limit: 20 });
+      const response = await client.getProducts({ limit: 20, category: categoryId || undefined });
       setState({
         loading: false,
         refreshing: false,
@@ -44,9 +46,9 @@ export default function ProductListScreen({ navigation }) {
 
   return (
     <ScreenShell refreshing={state.refreshing} onRefresh={() => loadProducts(true)}>
-      <Surface style={{ padding: 18, borderRadius: 22, backgroundColor: "#fffdf9" }} elevation={1}>
+      <Surface style={{ padding: 18, borderRadius: 22, backgroundColor: "#fffdf9", marginBottom: 12 }} elevation={1}>
         <Text variant="titleLarge" style={{ color: "#432818", fontWeight: "800" }}>
-          Handmade marketplace
+          {categoryName || "Handmade marketplace"}
         </Text>
         <Text variant="bodyMedium" style={{ color: "#6b4f3a" }}>
           Browse active products from artisans across the platform.

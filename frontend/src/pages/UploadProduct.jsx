@@ -118,8 +118,12 @@ const UploadProduct = () => {
 
       const form = new FormData();
 
-      // Append text fields
-      Object.keys(formData).forEach(key => form.append(key, formData[key]));
+      // Append text fields, excluding tags as we handle it separately
+      Object.keys(formData).forEach(key => {
+        if (key !== 'tags') {
+          form.append(key, formData[key]);
+        }
+      });
       form.append('tags', JSON.stringify(tagsArray));
 
       if (isEditMode) {
@@ -129,11 +133,10 @@ const UploadProduct = () => {
       // Append images
       images.forEach(image => form.append('images', image));
 
-      let res;
       if (isEditMode) {
-        res = await apiService.updateProduct(productId, form);
+        await apiService.updateProduct(productId, form);
       } else {
-        res = await apiService.createProduct(form);
+        await apiService.createProduct(form);
       }
 
       alert(`✅ Product ${isEditMode ? 'updated' : 'uploaded'} successfully!`);

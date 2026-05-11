@@ -1,6 +1,6 @@
 const API_BASE_URL =
     process.env.REACT_APP_API_URL ||
-    "http://localhost:5000/api/v1";
+    "https://zimcrafts-hub.onrender.com/api/v1";
 
 const GET_CACHE_TTL_MS = 3000;
 
@@ -129,6 +129,20 @@ class ApiService {
             return Promise.reject(new Error('Not authorized'));
         }
         return this.request("/auth/me");
+    }
+
+    forgotPassword(email) {
+        return this.request("/auth/forgotpassword", {
+            method: "POST",
+            body: JSON.stringify({ email }),
+        });
+    }
+
+    resetPassword(token, password) {
+        return this.request(`/auth/resetpassword/${token}`, {
+            method: "PUT",
+            body: JSON.stringify({ password }),
+        });
     }
 
     verifyEmail(token) {
@@ -266,6 +280,12 @@ class ApiService {
     );
   }
 
+  deleteProduct(id) {
+    return this.request(`/products/${id}`, {
+      method: "DELETE",
+    });
+  }
+
   // ================= TUTORIALS =================
   getTutorials(params = {}) {
     const query = new URLSearchParams(params).toString();
@@ -355,7 +375,7 @@ class ApiService {
   // ================= IMAGEKIT AUTH (FIXED) =================
   async getImageKitAuth() {
     const apiRoot = API_BASE_URL.replace(/\/api\/v1\/?$/, "") ||
-      "http://localhost:5000";
+      "https://zimcrafts-hub.onrender.com";
     const url = `${apiRoot}/api/imagekit-auth`;
 
     const response = await fetch(url, {

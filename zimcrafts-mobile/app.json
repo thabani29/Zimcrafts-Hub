@@ -35,7 +35,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#f5ede2"
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "reactCompiler": true

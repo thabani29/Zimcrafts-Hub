@@ -31,6 +31,10 @@ const productSchema = new mongoose.Schema({
         ref: 'Category',
         required: [true, 'Select you product category']
     },
+    subcategory: {
+        type: String,
+        trim: true
+    },
     artisan: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -62,6 +66,10 @@ const productSchema = new mongoose.Schema({
         default: 0,
         min: 0
     },
+    tags: [{
+        type: String,
+        trim: true
+    }],
     materials: {
         type: String,
         lowercase: true

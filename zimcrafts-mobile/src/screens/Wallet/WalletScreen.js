@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Linking, StyleSheet, View } from "react-native";
-import { Surface, Text } from "react-native-paper";
+import { Alert, StyleSheet, View } from "react-native";
+import * as Linking from "expo-linking";
+import { Surface, Text, TextInput } from "react-native-paper";
 import client from "../../api/client";
 import AppButton from "../../components/AppButton";
 import EmptyState from "../../components/EmptyState";
@@ -9,8 +10,8 @@ import ScreenShell from "../../components/ScreenShell";
 import StatusChip from "../../components/StatusChip";
 import { formatCurrency } from "../../utils/formatters";
 
-export default function WalletScreen() {
-  const [amount, setAmount] = useState(10);
+export default function WalletScreen({ route }) {
+  const [amount, setAmount] = useState("10");
   const [state, setState] = useState({
     loading: true,
     refreshing: false,
@@ -21,7 +22,22 @@ export default function WalletScreen() {
 
   useEffect(() => {
     loadWallet();
-  }, []);
+    if (route.params?.walletReference) {
+      confirmTopup(route.params.walletReference);
+    }
+  }, [route.params?.walletReference]);
+
+  const confirmTopup = async (reference) => {
+    try {
+      setState((current) => ({ ...current, loading: true }));
+      await client.confirmWalletTopup(reference);
+      Alert.alert("Success", "Wallet top-up confirmed successfully!");
+      loadWallet();
+    } catch (error) {
+      Alert.alert("Confirmation failed", error.message || "Failed to confirm top-up");
+      setState((current) => ({ ...current, loading: false }));
+    }
+  };
 
   const loadWallet = async (refreshing = false) => {
     try {
@@ -50,7 +66,8 @@ export default function WalletScreen() {
 
   const handleTopup = async () => {
     try {
-      const response = await client.startWalletTopup(amount);
+      const returnUrl = Linking.createURL("wallet");
+      const response = await client.startWalletTopup(amount, returnUrl);
       const redirectUrl = response.data?.redirectUrl;
       if (redirectUrl) {
         await Linking.openURL(redirectUrl);
@@ -97,8 +114,16 @@ export default function WalletScreen() {
         <Text variant="titleMedium" style={styles.title}>
           Top up with Paynow
         </Text>
-        <Text variant="bodyMedium">Tap to add {formatCurrency(amount)} to your artisan wallet.</Text>
-        <AppButton onPress={handleTopup}>Top-up button</AppButton>
+        <Text variant="bodyMedium">Enter amount to add to your artisan wallet.</Text>
+        <TextInput
+          mode="outlined"
+          label="Amount ($)"
+          value={String(amount)}
+          onChangeText={setAmount}
+          keyboardType="numeric"
+          style={{ marginBottom: 12 }}
+        />
+        <AppButton onPress={handleTopup}>Top Up</AppButton>
       </Surface>
 
       <Surface style={styles.card} elevation={1}>

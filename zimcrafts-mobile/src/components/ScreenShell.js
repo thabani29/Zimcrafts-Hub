@@ -8,22 +8,24 @@ export default function ScreenShell({
   onRefresh,
   contentContainerStyle,
 }) {
-  if (!scroll) {
-    return <View style={[styles.container, contentContainerStyle]}>{children}</View>;
-  }
-
   return (
-    <ScrollView
-      style={styles.page}
-      contentContainerStyle={[styles.container, contentContainerStyle]}
-      refreshControl={
-        onRefresh ? (
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        ) : undefined
-      }
-    >
-      {children}
-    </ScrollView>
+    <View style={styles.page}>
+      {scroll ? (
+        <ScrollView
+          style={styles.page}
+          contentContainerStyle={[styles.container, contentContainerStyle]}
+          refreshControl={
+            onRefresh ? (
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            ) : undefined
+          }
+        >
+          {children}
+        </ScrollView>
+      ) : (
+        <View style={[styles.container, contentContainerStyle]}>{children}</View>
+      )}
+    </View>
   );
 }
 

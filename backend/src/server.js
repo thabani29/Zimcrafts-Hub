@@ -1,65 +1,46 @@
 require('dotenv').config();
 const app = require('./src/app');
 const connectDB = require('./src/config/database');
+const { startOrderReminderScheduler } = require('./src/services/orderReminderService');
+const { getBackendBaseUrl } = require('./src/utils/publicUrls');
 
-// -----------------------------
-// Import Routes
-// -----------------------------
-const authRoutes = require('./routes/auth');
-const productRoutes = require('./routes/products');
-const categoryRoutes = require('./routes/categories');
-const orderRoutes = require('./routes/orders');
-const emailRoutes = require('./routes/emailroutes');
-const paymentRoutes = require('./routes/paymentRoutes');
-const tutorialRoutes = require('./routes/tutorials');
-const enrollRoutes = require('./routes/enroll');
-const examRoutes = require('./routes/exam');
-const imagekitRoutes = require('./routes/imagekit');
-
-// -----------------------------
-// Connect to Database
-// -----------------------------
-connectDB();
-
-// -----------------------------
-// Start Server
-// -----------------------------
 const PORT = process.env.PORT || 5000;
+const BASE_URL = getBackendBaseUrl();
 
-const server = app.listen(PORT, () => {
-    console.log('=================================');
-    console.log(`ZimCrafts Hub Server Started`);
-    console.log(`Port: ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV}`);
-    console.log(`Database: Connected`);
-    console.log('=================================');
-    console.log(`API Documentation:`);
-    console.log(`   • Health Check: http://localhost:${PORT}/health`);
-    console.log(`   • Email Endpoints: http://localhost:${PORT}/api/v1/emails`);
-    console.log(`   • Payment Endpoints: http://localhost:${PORT}/api/v1/payments`);
-    console.log(`   • Auth Endpoints: http://localhost:${PORT}/api/v1/auth`);
-    console.log(`   • Product Endpoints: http://localhost:${PORT}/api/v1/products`);
-    console.log(`   • Order Endpoints: http://localhost:${PORT}/api/v1/orders`);
-    console.log(`   • Category Endpoints: http://localhost:${PORT}/api/v1/categories`);
-    console.log(`   • API Base URL: http://localhost:${PORT}/api/v1`);
-    console.log('=================================');
-});
+let server;
+let reminderScheduler;
 
-// -----------------------------
-// Handle Unhandled Promise Rejections
-// -----------------------------
-process.on('unhandledRejection', (err, promise) => {
-    console.log(`Error: ${err.message}`);
-    console.log(err.stack);
-    server.close(() => process.exit(1));
-});
+// Connect DB first
+connectDB()
+    .then(() => {
+        server = app.listen(PORT, "0.0.0.0", () => {
+            console.log('=================================');
+            console.log(`✅ ZimCrafts Hub Server Started`);
+            console.log(`📡 Port: ${PORT}`);
+            console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+            console.log(`💾 Database: Connected`);
+            console.log('=================================');
+            console.log(`📌 API Endpoints:`);
+            console.log(`   • Health: ${BASE_URL}/health`);
+            console.log(`   • Auth: ${BASE_URL}/api/v1/auth`);
+            console.log(`   • Products: ${BASE_URL}/api/v1/products`);
+            console.log(`=================================`);
+        });
 
-// -----------------------------
-// Handle SIGTERM Signal (Graceful Shutdown)
-// -----------------------------
-process.on('SIGTERM', () => {
-    console.log(' SIGTERM received. Shutting down gracefully...');
-    server.close(() => {
-        console.log(' Process terminated');
+        if (process.env.ENABLE_SCHEDULER === "true") {
+            reminderScheduler = startOrderReminderScheduler();
+        }
+    })
+    .catch((err) => {
+        console.error("❌ Database connection failed:", err);
+        process.exit(1);
     });
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('👋 SIGTERM received. Shutting down...');
+    if (reminderScheduler) clearInterval(reminderScheduler);
+    if (server) {
+        server.close(() => console.log('Process terminated'));
+    }
 });

@@ -3,6 +3,7 @@ const Submission = require('../models/Submission');
 const Enrollment = require('../models/Enrollment');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
+const { buildPublicAppUrl } = require('../utils/publicUrls');
 
 // Helper functions
 const normalize = (val) =>
@@ -272,9 +273,10 @@ exports.submitExam = asyncHandler(async(req, res, next) => {
 
     const passed = score >= passThreshold;
 
-    const certificateUrl = (examType === 'final' && passed) ?
-        `${process.env.FRONTEND_URL || 'http://localhost:3000'}/certificate/${tutorial._id}/${req.user.id}` :
-        null;
+    const certificateUrl =
+        examType === 'final' && passed
+            ? buildPublicAppUrl(`/certificate/${tutorial._id}/${req.user.id}`)
+            : null;
 
     const submission = await Submission.create({
         userId: req.user.id,

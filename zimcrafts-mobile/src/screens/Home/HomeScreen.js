@@ -69,7 +69,13 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.categoryWrap}>
           {state.categories.slice(0, 6).map((category) => (
             <Surface key={category._id} style={styles.categoryChip} elevation={0}>
-              <Text variant="labelLarge" style={styles.categoryText}>
+              <Text 
+                variant="labelLarge" 
+                style={styles.categoryText}
+                onPress={() => navigation.navigate("ProductList", {
+                  category: category._id, categoryName: category.name
+                })}
+              >
                 {category.name}
               </Text>
             </Surface>
@@ -81,7 +87,7 @@ export default function HomeScreen({ navigation }) {
         <Text variant="titleLarge" style={styles.sectionTitle}>
           Fresh finds
         </Text>
-        <Text variant="bodyMedium" style={styles.link} onPress={() => navigation.navigate("Products")}>
+        <Text variant="bodyMedium" style={styles.link} onPress={() => navigation.navigate("ProductList")}>
           See all
         </Text>
       </View>
@@ -92,9 +98,8 @@ export default function HomeScreen({ navigation }) {
             key={product._id}
             product={product}
             onPress={() =>
-              navigation.navigate("Products", {
-                screen: "ProductDetail",
-                params: { productId: product._id, productName: product.name },
+              navigation.navigate("ProductDetail", {
+                productId: product._id, productName: product.name
               })
             }
           />

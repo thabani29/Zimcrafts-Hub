@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
-const fallbackBaseUrl = "http://192.168.0.100:5000/api/v1";
+const fallbackBaseUrl = "https://zimcrafts-hub.onrender.com/api/v1";
 const TOKEN_KEY = "zimcrafts_access_token";
 
 const api = axios.create({

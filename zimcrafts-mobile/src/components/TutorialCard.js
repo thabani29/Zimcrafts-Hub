@@ -19,7 +19,7 @@ export default function TutorialCard({ tutorial, onPress }) {
               {formatCurrency(tutorial.price)}
             </Text>
             <Text variant="bodySmall" style={styles.meta}>
-              {tutorial.artisanId?.name || "Artisan tutorial"}
+              {tutorial.artisanId?.name || tutorial.artisan?.name || "Artisan tutorial"}
             </Text>
           </View>
         </Card.Content>

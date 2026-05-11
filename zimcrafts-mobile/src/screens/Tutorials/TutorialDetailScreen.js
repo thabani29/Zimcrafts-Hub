@@ -10,7 +10,7 @@ import StatusChip from "../../components/StatusChip";
 import { useAuth } from "../../context/AuthContext";
 import { formatCurrency } from "../../utils/formatters";
 
-export default function TutorialDetailScreen({ route }) {
+export default function TutorialDetailScreen({ route, navigation }) {
   const { tutorialId } = route.params;
   const { isCustomer, isArtisan } = useAuth();
   const [state, setState] = useState({
@@ -94,7 +94,7 @@ export default function TutorialDetailScreen({ route }) {
         <Text variant="bodyMedium" style={styles.description}>
           {state.tutorial.description}
         </Text>
-        <Text variant="bodyMedium">Artisan: {state.tutorial.artisanId?.name || "Unknown"}</Text>
+        <Text variant="bodyMedium">Artisan: {state.tutorial?.artisanId?.name || state.tutorial?.artisan?.name || "Unknown"}</Text>
         <Text variant="bodyMedium">
           Lessons: {Array.isArray(state.tutorial.lessons) ? state.tutorial.lessons.length : 0}
         </Text>
@@ -104,22 +104,38 @@ export default function TutorialDetailScreen({ route }) {
 
       {isCustomer ? (
         <Surface style={styles.card} elevation={1}>
-          <Text variant="titleMedium" style={styles.title}>
-            Request enrollment
-          </Text>
-          <AppTextField
-            label="Message to artisan"
-            multiline
-            value={state.message}
-            onChangeText={(value) => setState((current) => ({ ...current, message: value }))}
-          />
-          <AppButton
-            loading={state.submitting}
-            disabled={state.submitting || alreadyEnrolled || requestStatus === "PENDING"}
-            onPress={handleRequest}
-          >
-            Request enrollment
-          </AppButton>
+          {alreadyEnrolled ? (
+            <>
+              <Text variant="titleMedium" style={styles.title}>
+                Course Access
+              </Text>
+              <Text variant="bodyMedium" style={{ marginBottom: 12 }}>
+                You are enrolled in this tutorial.
+              </Text>
+              <AppButton onPress={() => navigation.navigate("CoursePlayer", { tutorialId, title: state.tutorial.title })}>
+                Start Course
+              </AppButton>
+            </>
+          ) : (
+            <>
+              <Text variant="titleMedium" style={styles.title}>
+                Request enrollment
+              </Text>
+              <AppTextField
+                label="Message to artisan"
+                multiline
+                value={state.message}
+                onChangeText={(value) => setState((current) => ({ ...current, message: value }))}
+              />
+              <AppButton
+                loading={state.submitting}
+                disabled={state.submitting || requestStatus === "PENDING"}
+                onPress={handleRequest}
+              >
+                Request enrollment
+              </AppButton>
+            </>
+          )}
         </Surface>
       ) : null}
 

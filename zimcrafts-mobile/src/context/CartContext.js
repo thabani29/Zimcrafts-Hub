@@ -13,10 +13,16 @@ export function CartProvider({ children }) {
 
     setItems((current) => {
       const existing = current.find((item) => item._id === id);
+      const maxStock = product.stock ?? Infinity;
+
       if (existing) {
-        return current.map((item) =>
-          item._id === id ? { ...item, quantity: item.quantity + quantity } : item
-        );
+        return current.map((item) => {
+          if (item._id === id) {
+            const newQuantity = Math.min(item.quantity + quantity, item.stock ?? Infinity);
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        });
       }
 
       return [
@@ -25,7 +31,7 @@ export function CartProvider({ children }) {
           _id: id,
           name: product.name,
           price: product.price,
-          quantity,
+          quantity: Math.min(quantity, maxStock),
           stock: product.stock,
           image:
             product?.productimages?.find((entry) => entry?.isPrimary)?.url ||
@@ -40,7 +46,13 @@ export function CartProvider({ children }) {
   const updateItemQuantity = (id, quantity) => {
     setItems((current) =>
       current
-        .map((item) => (item._id === id ? { ...item, quantity: Math.max(1, quantity) } : item))
+        .map((item) => {
+          if (item._id === id) {
+            const newQuantity = Math.min(Math.max(1, quantity), item.stock ?? Infinity);
+            return { ...item, quantity: newQuantity };
+          }
+          return item;
+        })
         .filter((item) => item.quantity > 0)
     );
   };

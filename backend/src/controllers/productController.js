@@ -419,10 +419,22 @@ exports.updateProduct = asyncHandler(async(req, res, next) => {
         }
     }
 
-    product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true
+    // Update product fields
+    Object.keys(req.body).forEach(key => {
+        product[key] = req.body[key];
     });
+
+    // Handle slug update if name changed
+    if (req.body.name) {
+        product.slug = req.body.name
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .trim();
+    }
+
+    await product.save();
 
     res.json({
         success: true,

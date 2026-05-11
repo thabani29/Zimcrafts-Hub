@@ -4,6 +4,7 @@ const TutorialPaymentSession = require('../models/TutorialPaymentSession');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
 const createPaynowClient = require('../config/paynow');
+const { buildBackendUrl, buildPublicAppUrl } = require('../utils/publicUrls');
 
 const normalizeCompletedLessons = (enrollment) => {
     if (!enrollment) {
@@ -69,15 +70,9 @@ const getPaynowState = (paymentStatus) => {
     return 'pending';
 };
 
-const buildFrontendUrl = (path) => {
-    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    return `${baseUrl.replace(/\/$/, '')}${path}`;
-};
+const buildFrontendUrl = (path) => buildPublicAppUrl(path);
 
-const buildApiUrl = (path) => {
-    const backendBase = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5000}`;
-    return `${backendBase.replace(/\/$/, '')}${path}`;
-};
+const buildApiUrl = (path) => buildBackendUrl(path);
 
 const hasValidPaynowConfig = () => {
     const integrationId = String(process.env.PAYNOW_INTEGRATION_ID || '').trim();

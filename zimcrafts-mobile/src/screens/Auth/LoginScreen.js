@@ -42,6 +42,16 @@ export default function LoginScreen({ navigation }) {
         <HelperText type="error" visible={Boolean(error)}>
           {error}
         </HelperText>
+        <View style={styles.forgotPasswordContainer}>
+          <AppButton
+            mode="text"
+            compact
+            onPress={() => navigation.navigate("ForgotPassword")}
+            labelStyle={styles.forgotPasswordText}
+          >
+            Forgot Password?
+          </AppButton>
+        </View>
         <AppButton loading={submitting} disabled={submitting} onPress={handleLogin}>
           Sign in
         </AppButton>
@@ -95,5 +105,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  forgotPasswordContainer: {
+    alignItems: "flex-end",
+    marginTop: -10,
+    marginBottom: 5,
+  },
+  forgotPasswordText: {
+    fontSize: 13,
+    color: "#e67e22",
   },
 });

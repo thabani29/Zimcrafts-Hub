@@ -10,16 +10,7 @@ const {
     applyCommissionByOrderId,
 } = require('../services/walletService');
 const withMongoTransaction = require('../utils/withMongoTransaction');
-
-const buildFrontendUrl = (path) => {
-    const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-    return `${baseUrl.replace(/\/$/, '')}${path}`;
-};
-
-const buildApiUrl = (path) => {
-    const backendBase = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5000}`;
-    return `${backendBase.replace(/\/$/, '')}${path}`;
-};
+const { buildBackendUrl, buildPublicAppUrl } = require('../utils/publicUrls');
 
 const hasValidPaynowConfig = () => {
     const integrationId = String(process.env.PAYNOW_INTEGRATION_ID || '').trim();
@@ -128,8 +119,15 @@ exports.startWalletTopup = asyncHandler(async(req, res) => {
     const paynow = createPaynowClient();
     const reference = `ZIMWALLET-${Date.now()}-${Math.floor(Math.random() * 9000 + 1000)}`;
 
-    paynow.returnUrl = buildFrontendUrl(`/seller-dashboard?walletReference=${encodeURIComponent(reference)}`);
-    paynow.resultUrl = buildApiUrl(`/api/v1/wallet/topup/result/${encodeURIComponent(reference)}`);
+    const customReturnUrl = req.body.returnUrl;
+    if (customReturnUrl) {
+        paynow.returnUrl = `${customReturnUrl}${customReturnUrl.includes('?') ? '&' : '?'}walletReference=${encodeURIComponent(reference)}`;
+    } else {
+        paynow.returnUrl = buildPublicAppUrl(`/seller-dashboard?walletReference=${encodeURIComponent(reference)}`);
+    }
+    
+    paynow.cancelUrl = req.body.cancelUrl || paynow.returnUrl;
+    paynow.resultUrl = buildBackendUrl(`/api/v1/wallet/topup/result/${encodeURIComponent(reference)}`);
 
     const payment = paynow.createPayment(reference, req.user.email);
     payment.add('ZimCrafts Hub Wallet Top-up', amount);

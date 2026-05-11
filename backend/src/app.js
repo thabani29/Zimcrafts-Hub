@@ -34,26 +34,25 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(helmet());
 
 // CORS
+const allowedOrigins = [...new Set(
+    [
+        process.env.FRONTEND_URL,
+        process.env.PUBLIC_APP_URL,
+        process.env.MOBILE_APP_URL,
+        process.env.BASE_URL,
+        process.env.BACKEND_URL,
+        'https://zimcrafts.com',
+        'https://www.zimcrafts.com',
+        'https://api.zimcrafts.com',
+        'https://zimcrafts-hub.onrender.com',
+        'http://localhost:3000',
+    ]
+        .filter(Boolean)
+        .map((origin) => origin.replace(/\/$/, ''))
+)];
+
 const corsOptions = {
     origin: function(origin, callback) {
-        const allowedOrigins = [
-            // Development - Web
-            'http://localhost:3000',
-            'http://localhost:5000',
-
-            // Development - Mobile
-            'http://localhost:19000',
-            'http://localhost:19001',
-            'http://192.168.0.100:19000',
-            'http://192.168.0.100:19001',
-            'http://192.168.0.100:5000',
-
-            // Production
-            'https://zimcrafts.com',
-            'https://www.zimcrafts.com',
-            'https://api.zimcrafts.com',
-        ];
-
         // Allow requests with no origin (mobile apps, Postman, etc.)
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
             callback(null, true);
