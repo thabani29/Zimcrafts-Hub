@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import apiService from '../services/api';
 import ImageUploader from '../components/product/ImageUploader';
@@ -26,36 +26,16 @@ const UploadProduct = () => {
   const [existingImages, setExistingImages] = useState([]);
 
   // Fetch categories and product data on mount
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    fetchCategories();
-    if (isEditMode) {
-      fetchProduct();
-    }
-  }, [isEditMode]);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await apiService.getCategories();
       setCategories(response.data || []);
     } catch (err) {
       console.error('Error fetching categories:', err);
     }
-  };
+  }, []);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleImagesSelected = (newImages) => {
-    setImages(prev => [...prev, ...newImages]);
-  };
-
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const response = await apiService.getProductById(productId);
@@ -81,6 +61,29 @@ const UploadProduct = () => {
     } finally {
       setLoading(false);
     }
+  }, [productId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchCategories();
+      if (isEditMode) {
+        await fetchProduct();
+      }
+    };
+
+    fetchData();
+  }, [isEditMode, fetchCategories, fetchProduct]);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleImagesSelected = (newImages) => {
+    setImages(prev => [...prev, ...newImages]);
   };
 
   const handleRemoveImage = (index) => {

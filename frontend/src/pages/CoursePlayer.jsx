@@ -45,12 +45,11 @@ const CoursePlayer = () => {
     }
   }, [tutorial]);
 
-  const completedLessons = enrollment?.completedLessons || [];
-
   const isLessonExamPassed = React.useCallback((lessonId) => {
+    const completedLessons = enrollment?.completedLessons || [];
     const progressEntry = completedLessons.find((entry) => entry.lessonId === lessonId);
     return progressEntry && progressEntry.examPassed;
-  }, [completedLessons]);
+  }, [enrollment]);
 
   useEffect(() => {
     if (!tutorial || !enrollment || !selectedLessonId) return;
@@ -63,7 +62,6 @@ const CoursePlayer = () => {
       const nextLesson = tutorial.lessons[selectedIndex + 1];
       setSelectedLessonId(nextLesson._id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enrollment, tutorial, selectedLessonId, isLessonExamPassed]);
 
   const handleEnroll = async () => {
