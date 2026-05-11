@@ -20,7 +20,7 @@ const UploadTutorial = () => {
   const [finalExamQuestions, setFinalExamQuestions] = useState([ { ...emptyQuestion } ]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState({});
+  const [, setUploadProgress] = useState({});
   const [uploadingLesson, setUploadingLesson] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [tutorialId, setTutorialId] = useState(null);

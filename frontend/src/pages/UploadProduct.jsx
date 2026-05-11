@@ -26,6 +26,7 @@ const UploadProduct = () => {
   const [existingImages, setExistingImages] = useState([]);
 
   // Fetch categories and product data on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchCategories();
     if (isEditMode) {

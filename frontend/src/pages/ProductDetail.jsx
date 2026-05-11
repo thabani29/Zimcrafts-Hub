@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -22,18 +22,18 @@ const ProductDetail = () => {
 
   const { getCartTotalItems } = useCart();
 
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       const response = await apiService.getProductById(id);
       setProduct(response.data.product);
     } catch (err) {
       console.error('Error loading product:', err.message || err);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     fetchProduct();
-  }, [id]);
+  }, [fetchProduct]);
 
   // Auto-hide alert after 3 seconds
   useEffect(() => {
@@ -113,11 +113,11 @@ const ProductDetail = () => {
 
         {/* IMAGE SECTION */}
         <div>
-          <div className="rounded-xl overflow-hidden border mb-4">
+          <div className="rounded-xl overflow-hidden border mb-4 shadow-sm">
             <img
               src={mainImage}
               alt={product.productimages[selectedImageIndex]?.altText || 'product image'}
-              className="w-full h-[400px] object-cover transition-transform duration-300 hover:scale-105"
+              className="w-full h-64 md:h-[400px] object-cover transition-transform duration-300 hover:scale-105"
             />
           </div>
 

@@ -45,6 +45,13 @@ const CoursePlayer = () => {
     }
   }, [tutorial]);
 
+  const completedLessons = enrollment?.completedLessons || [];
+
+  const isLessonExamPassed = React.useCallback((lessonId) => {
+    const progressEntry = completedLessons.find((entry) => entry.lessonId === lessonId);
+    return progressEntry && progressEntry.examPassed;
+  }, [completedLessons]);
+
   useEffect(() => {
     if (!tutorial || !enrollment || !selectedLessonId) return;
 
@@ -56,7 +63,8 @@ const CoursePlayer = () => {
       const nextLesson = tutorial.lessons[selectedIndex + 1];
       setSelectedLessonId(nextLesson._id);
     }
-  }, [enrollment, tutorial, selectedLessonId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enrollment, tutorial, selectedLessonId, isLessonExamPassed]);
 
   const handleEnroll = async () => {
     if (!user) {
@@ -92,7 +100,6 @@ const CoursePlayer = () => {
   };
 
   const selectedLesson = tutorial?.lessons?.find((lesson) => lesson._id === selectedLessonId);
-  const completedLessons = enrollment?.completedLessons || [];
   const progress = enrollment?.progress || 0;
   const pendingRequest = requestState?.status === 'PENDING';
   const rejectedRequest = requestState?.status === 'REJECTED';
@@ -112,10 +119,6 @@ const CoursePlayer = () => {
     `Hello ${tutorial?.artisanId?.name || 'Artisan'}, I would like to ask about your tutorial "${tutorial?.title || 'this tutorial'}".`
   );
 
-  const isLessonExamPassed = (lessonId) => {
-    const progressEntry = completedLessons.find((entry) => entry.lessonId === lessonId);
-    return progressEntry && progressEntry.examPassed;
-  };
 
   const allLessonExamsPassed = Boolean(
     tutorial?.lessons?.length && tutorial.lessons.every((lesson) => isLessonExamPassed(lesson._id))

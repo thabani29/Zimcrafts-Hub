@@ -47,6 +47,7 @@ const SellerDashboard = () => {
     refreshSellerAnalytics();
     refreshWalletData();
     refreshTutorialRequests();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading, isAuthenticated, navigate]);
 
   useEffect(() => {

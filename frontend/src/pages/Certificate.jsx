@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
 
 const Certificate = () => {
-  const { tutorialId, userId } = useParams();
+  const { tutorialId } = useParams();
   const { user } = useAuth();
   const [tutorial, setTutorial] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -131,7 +131,10 @@ const Certificate = () => {
             >
               Download as PDF
             </button>
-            <div className="text-sm text-gray-500 print-hidden">Powered by ZimCrafts Hub</div>
+            <div className="text-sm text-gray-500 print-hidden">
+              <p>Issued on: {issueDate}</p>
+              <p>Powered by ZimCrafts Hub</p>
+            </div>
           </div>
         </div>
       </div>

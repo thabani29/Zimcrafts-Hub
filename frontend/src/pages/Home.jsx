@@ -83,18 +83,18 @@ const Home = () => {
     <div className="px-4 md:px-8 py-8">
       {/* Hero Banner Section with Quick Links Carousel */}
       <section className="mb-8">
-        <div className="bg-gradient-to-r from-primary-orange to-orange-400 rounded-2xl px-4 md:px-6 py-6 md:py-8 relative overflow-hidden shadow-xl">
+        <div className="bg-gradient-to-r from-primary-orange to-orange-400 rounded-2xl px-4 md:px-8 py-8 md:py-12 relative overflow-hidden shadow-xl text-center">
           {/* Decorative background elements */}
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-4xl opacity-10">◉</div>
-          <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-4xl opacity-10">◉</div>
+          <div className="absolute -left-4 top-1/2 transform -translate-y-1/2 text-6xl opacity-10 hidden sm:block">◉</div>
+          <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 text-6xl opacity-10 hidden sm:block">◉</div>
           
-          <div className="relative z-10">
+          <div className="relative z-10 max-w-2xl mx-auto">
             {/* Header Text */}
-            <div className="text-center mb-4">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-1">
+            <div className="mb-6">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-3 tracking-tight">
                 Support Local Communities
               </h2>
-              <p className="text-primary-yellow font-semibold text-xs md:text-sm">
+              <p className="text-primary-yellow font-semibold text-sm md:text-lg uppercase tracking-wider">
                 Every purchase empowers Zimbabwean artisans
               </p>
             </div>
@@ -104,33 +104,33 @@ const Home = () => {
               {/* Link Card */}
               <Link
                 to={currentLink.path}
-                className="group flex-1 max-w-sm relative bg-gradient-to-br from-primary-orange to-orange-400 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 p-4 md:p-5 text-center cursor-pointer overflow-hidden border border-white border-opacity-20 hover:border-opacity-40"
+                className="group w-full max-w-sm relative bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl shadow-2xl hover:shadow-primary-orange/20 transition-all duration-300 transform hover:scale-[1.02] p-6 md:p-8 text-center cursor-pointer overflow-hidden border border-white border-opacity-20"
               >
-                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-all duration-300 rounded-xl" />
+                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-all duration-300" />
                 <div className="relative z-10">
-                  <div className="text-3xl md:text-4xl mb-2">{currentLink.icon}</div>
-                  <h3 className="text-sm md:text-lg font-bold text-white mb-1 group-hover:text-primary-yellow transition-colors">
+                  <div className="text-4xl md:text-5xl mb-4 transform group-hover:scale-110 transition-transform">{currentLink.icon}</div>
+                  <h3 className="text-lg md:text-2xl font-bold text-white mb-2 group-hover:text-primary-yellow transition-colors">
                     {currentLink.title}
                   </h3>
-                  <p className="text-xs md:text-sm text-white text-opacity-90">
+                  <p className="text-sm md:text-base text-white text-opacity-90 leading-relaxed">
                     {currentLink.description}
                   </p>
                 </div>
               </Link>
             </div>
 
-            {/* Dot indicators - Primary Navigation */}
-            <div className="flex justify-center space-x-2 mt-4">
+            {/* Dot indicators */}
+            <div className="flex justify-center space-x-3 mt-8">
               {quickLinks.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentLinkIndex(index)}
-                  className={`transition-all duration-300 rounded-full cursor-pointer hover:scale-125 ${
+                  className={`transition-all duration-500 rounded-full cursor-pointer hover:scale-125 ${
                     index === currentLinkIndex 
-                      ? 'bg-white w-3 h-3 shadow-lg' 
-                      : 'bg-white bg-opacity-50 hover:bg-opacity-80 w-2 h-2'
+                      ? 'bg-primary-yellow w-8 h-2 shadow-lg' 
+                      : 'bg-white bg-opacity-30 hover:bg-opacity-60 w-2 h-2'
                   }`}
-                  aria-label={`Go to link ${index + 1}`}
+                  aria-label={`Go to slide ${index + 1}`}
                 />
               ))}
             </div>
@@ -139,18 +139,17 @@ const Home = () => {
       </section>
 
       {/* Search Bar */}
-      <section className="mb-12">
-        <div className="relative">
-          <div className="flex items-center bg-white rounded-lg shadow-md p-3 border-2 border-gray-200 hover:border-primary-orange transition-colors">
-            <span className="text-gray-400 text-xl mr-3">🔍</span>
+      <section className="mb-16">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center bg-white rounded-2xl shadow-lg p-4 border-2 border-transparent hover:border-primary-orange transition-all duration-300 group">
+            <span className="text-2xl mr-4 group-hover:scale-110 transition-transform">🔍</span>
             <input 
               type="text"
               placeholder="Search products, tutorials, artisans..."
-              className="flex-1 outline-none text-gray-700 placeholder-gray-400"
+              className="flex-1 outline-none text-gray-700 placeholder-gray-400 bg-transparent text-lg"
               readOnly
               onClick={() => {
-                // Redirect to products page when clicking on search
-                window.location.href = '/products';
+                navigate('/products');
               }}
             />
           </div>
@@ -158,8 +157,8 @@ const Home = () => {
       </section>
 
       {/* Categories Grid */}
-      <section className="mb-12">
-        <h3 className="text-3xl font-bold mb-8 text-primary-brown text-center animate-pulse">
+      <section className="mb-16">
+        <h3 className="text-2xl md:text-4xl font-black mb-10 text-primary-brown text-center uppercase tracking-tighter">
           Browse Categories
         </h3>
 

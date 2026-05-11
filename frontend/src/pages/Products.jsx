@@ -151,6 +151,7 @@ const Products = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 12, total: 0, pages: 0 });
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({ category: '', minPrice: 0, maxPrice: 500, sortBy: '-createdAt', type: 'products' });
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const { getCartTotalItems } = useCart();
 
@@ -258,7 +259,7 @@ const Products = () => {
     };
 
     fetchData();
-  }, [filters, searchQuery, pagination.page, categoryId]);
+  }, [filters, searchQuery, pagination.page, pagination.limit, categoryId]);
 
   const updateSearchQuery = (query) => {
     setSearchQuery(query);
@@ -293,10 +294,7 @@ const Products = () => {
     setPagination(prev => ({ ...prev, page: 1 }));
   };
 
-  const handlePageChange = (newPage) => {
-    setPagination(prev => ({ ...prev, page: newPage }));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+
 
   if (loading && products.length === 0) {
     return (
@@ -338,12 +336,22 @@ const Products = () => {
           </div>
         )}
 
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-start">
-          <div className="lg:w-[17rem] lg:flex-shrink-0">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+          {/* Mobile Filter Toggle */}
+          <div className="lg:hidden">
+            <button 
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className="w-full flex items-center justify-center space-x-2 bg-white border-2 border-primary-orange text-primary-orange py-3 rounded-xl font-bold shadow-sm hover:bg-orange-50 transition-colors"
+            >
+              <span>{showMobileFilters ? '✕ Close Filters' : '🔍 Filter & Sort'}</span>
+            </button>
+          </div>
+
+          <div className={`${showMobileFilters ? 'block' : 'hidden'} lg:block lg:w-[17rem] lg:flex-shrink-0`}>
             <FilterSidebar
               filters={filters}
               updateFilters={updateFilters}
-              clearAllFilters={clearAllFilters}
+              clearAllFilters={() => { clearAllFilters(); setShowMobileFilters(false); }}
               categories={categories}
             />
           </div>
