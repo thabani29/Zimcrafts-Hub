@@ -45,7 +45,7 @@ const allowedOrigins = [...new Set(
         'https://www.zimcrafts.com',
         'https://api.zimcrafts.com',
         'https://zimcrafts-hub.onrender.com',
-        'http://localhost:3000',
+        'https://zimcrafts-hub.vercel.app',
     ]
         .filter(Boolean)
         .map((origin) => origin.replace(/\/$/, ''))
