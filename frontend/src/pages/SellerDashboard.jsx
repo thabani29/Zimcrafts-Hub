@@ -327,14 +327,14 @@ const SellerDashboard = () => {
         <div className="p-6 border-b">
           <h2 className="text-xl font-semibold">Quick Actions</h2>
         </div>
-        <div className="p-6 flex flex-wrap gap-4">
-          <Link to="/upload-product" className="bg-orange-500 text-white px-4 py-2 rounded-xl">
+        <div className="p-6 flex flex-col sm:flex-row flex-wrap gap-4">
+          <Link to="/upload-product" className="flex-1 sm:flex-none text-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-sm transition-all active:scale-95">
             + Add New Product
           </Link>
-          <Link to="/upload-tutorial" className="bg-blue-600 text-white px-4 py-2 rounded-xl">
+          <Link to="/upload-tutorial" className="flex-1 sm:flex-none text-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-sm transition-all active:scale-95">
             + Create Tutorial
           </Link>
-          <Link to="/seller-orders" className="bg-primary-brown text-white px-4 py-2 rounded-xl">
+          <Link to="/seller-orders" className="flex-1 sm:flex-none text-center bg-primary-brown hover:bg-stone-800 text-white px-6 py-3 rounded-xl font-semibold shadow-sm transition-all active:scale-95">
             View Seller Orders
           </Link>
         </div>
@@ -350,13 +350,13 @@ const SellerDashboard = () => {
               <p>No products yet.</p>
             ) : (
               products.slice(0, 3).map((product) => (
-                <div key={product._id} className="flex justify-between items-center border p-4 rounded-2xl">
-                  <div className="flex items-center space-x-4">
-                    <img src={getPrimaryImage(product)} alt={product.name} className="w-16 h-16 object-cover rounded" />
-                    <div>
-                      <h3 className="font-semibold">{product.name}</h3>
-                      <p className="text-orange-500">{formatPrice(product.price)}</p>
-                      <div className="text-sm text-gray-600 space-x-3">
+                <div key={product._id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border border-slate-100 p-4 rounded-2xl hover:bg-slate-50 transition-colors">
+                  <div className="flex items-center space-x-4 min-w-0">
+                    <img src={getPrimaryImage(product)} alt={product.name} className="w-16 h-16 flex-shrink-0 object-cover rounded-xl" />
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-slate-900 truncate">{product.name}</h3>
+                      <p className="text-orange-500 font-medium">{formatPrice(product.price)}</p>
+                      <div className="text-sm text-gray-500 flex flex-wrap gap-x-3 gap-y-1">
                         <span>Stock: {product.stock}</span>
                         <span>Sold: {product.soldCount || 0}</span>
                       </div>
@@ -364,7 +364,7 @@ const SellerDashboard = () => {
                   </div>
                   <button
                     onClick={() => setActiveTab("products")}
-                    className="text-primary-orange hover:underline text-sm font-medium"
+                    className="w-full sm:w-auto text-primary-orange hover:text-orange-600 bg-orange-50 sm:bg-transparent px-4 py-2 sm:p-0 rounded-xl sm:rounded-none text-sm font-bold transition-colors"
                   >
                     Manage
                   </button>
@@ -385,23 +385,23 @@ const SellerDashboard = () => {
               tutorials.slice(0, 3).map((tutorial) => (
                 <div
                   key={tutorial._id}
-                  className="group flex items-center justify-between rounded-2xl border border-slate-200 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50/40 hover:shadow-lg"
+                  className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-slate-200 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50/40 hover:shadow-lg"
                 >
-                  <div className="flex items-center space-x-4">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-100 via-blue-50 to-amber-50 text-2xl text-sky-700 transition-transform duration-300 group-hover:scale-110">
+                  <div className="flex items-center space-x-4 min-w-0">
+                    <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-100 via-blue-50 to-amber-50 text-2xl text-sky-700 transition-transform duration-300 group-hover:scale-110">
                       T
                     </div>
-                    <div>
-                      <h3 className="font-semibold">{tutorial.title}</h3>
-                      <p className="text-blue-500">{formatPrice(tutorial.price)}</p>
-                      <div className="text-sm text-gray-600 space-x-3">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-slate-900 truncate">{tutorial.title}</h3>
+                      <p className="text-blue-600 font-medium">{formatPrice(tutorial.price)}</p>
+                      <div className="text-sm text-gray-500">
                         <span>Lessons: {tutorial.lessons?.length || 0}</span>
                       </div>
                     </div>
                   </div>
                   <button
                     onClick={() => setActiveTab("tutorials")}
-                    className="rounded-xl border border-sky-200 bg-white px-4 py-2 text-sm font-medium text-sky-700 shadow-sm transition-all duration-300 hover:border-sky-300 hover:bg-sky-100 hover:text-sky-900 active:translate-y-px"
+                    className="w-full sm:w-auto rounded-xl border border-sky-200 bg-white px-4 py-2 text-sm font-bold text-sky-700 shadow-sm transition-all duration-300 hover:border-sky-300 hover:bg-sky-100 hover:text-sky-900 active:translate-y-px"
                   >
                     Manage
                   </button>
@@ -427,32 +427,38 @@ const SellerDashboard = () => {
           <p>No products yet.</p>
         ) : (
           products.map((product) => (
-            <div key={product._id} className="flex justify-between items-center border p-4 rounded-2xl">
-              <div className="flex items-center space-x-4">
-                <img src={getPrimaryImage(product)} alt={product.name} className="w-16 h-16 object-cover rounded" />
-                <div>
-                  <h3 className="font-semibold">{product.name}</h3>
-                  <p className="text-orange-500">{formatPrice(product.price)}</p>
-                  <div className="text-sm text-gray-600 space-x-3">
+            <div key={product._id} className="flex flex-col gap-4 border p-4 rounded-2xl sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center space-x-4 min-w-0">
+                <img src={getPrimaryImage(product)} alt={product.name} className="w-16 h-16 flex-shrink-0 object-cover rounded" />
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold truncate text-slate-900">{product.name}</h3>
+                  <p className="text-orange-500 font-medium">{formatPrice(product.price)}</p>
+                  <div className="text-sm text-gray-600 flex flex-wrap gap-x-3 gap-y-1 mt-1">
                     <span>Stock: {product.stock}</span>
                     <span>Sold: {product.soldCount || 0}</span>
-                    <span className={`px-2 py-1 text-xs rounded ${product.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-200"}`}>
+                    <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${product.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
                       {product.status === "active" ? "Active" : "Inactive"}
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="space-x-2">
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                 <button
                   onClick={() => toggleProductStatus(product._id, product.status)}
-                  className={`px-3 py-1 rounded text-white ${product.status === "active" ? "bg-yellow-500" : "bg-green-500"}`}
+                  className={`flex-1 sm:flex-none px-3 py-2 rounded-xl text-white text-sm font-semibold transition-all duration-200 active:scale-95 ${product.status === "active" ? "bg-amber-500 hover:bg-amber-600 shadow-sm shadow-amber-100" : "bg-emerald-500 hover:bg-emerald-600 shadow-sm shadow-emerald-100"}`}
                 >
                   {product.status === "active" ? "Deactivate" : "Activate"}
                 </button>
-                <Link to={`/edit-product/${product._id}`} className="bg-blue-500 text-white px-3 py-1 rounded">
+                <Link 
+                  to={`/edit-product/${product._id}`} 
+                  className="flex-1 sm:flex-none bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-xl text-center text-sm font-semibold transition-all duration-200 active:scale-95 shadow-sm shadow-blue-100"
+                >
                   Edit
                 </Link>
-                <button onClick={() => deleteProduct(product._id)} className="bg-red-500 text-white px-3 py-1 rounded">
+                <button 
+                  onClick={() => deleteProduct(product._id)} 
+                  className="flex-1 sm:flex-none bg-rose-500 hover:bg-rose-600 text-white px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 shadow-sm shadow-rose-100"
+                >
                   Delete
                 </button>
               </div>
@@ -478,36 +484,37 @@ const SellerDashboard = () => {
           tutorials.map((tutorial) => (
             <div
               key={tutorial._id}
-              className="group flex flex-col gap-4 rounded-3xl border border-slate-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50/40 hover:shadow-lg lg:flex-row lg:items-center lg:justify-between"
+              className="group flex flex-col gap-4 rounded-3xl border border-slate-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50/40 hover:shadow-lg sm:flex-row sm:items-center sm:justify-between"
             >
-              <div className="flex items-center space-x-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-100 via-blue-50 to-amber-50 text-2xl text-sky-700 transition-transform duration-300 group-hover:scale-110">
+              <div className="flex items-center space-x-4 min-w-0">
+                <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-100 via-blue-50 to-amber-50 text-2xl text-sky-700 transition-transform duration-300 group-hover:scale-110">
                   T
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-semibold text-slate-900">{tutorial.title}</h3>
-                    <span className="rounded-full bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-700">
+                    <h3 className="font-semibold text-slate-900 truncate">{tutorial.title}</h3>
+                    <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
                       {tutorial.category?.name || "Uncategorized"}
                     </span>
                   </div>
-                  <p className="mt-1 text-blue-500">{formatPrice(tutorial.price)}</p>
+                  <p className="mt-1 text-blue-600 font-medium">{formatPrice(tutorial.price)}</p>
                   <div className="mt-2 flex flex-wrap gap-3 text-sm text-gray-600">
                     <span>{tutorial.lessons?.length || 0} lessons</span>
+                    <span className="hidden xs:inline">•</span>
                     <span>Self-paced content</span>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
                 <Link
                   to={`/upload-tutorial?id=${tutorial._id}`}
-                  className="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-blue-600 hover:shadow-md active:translate-y-px"
+                  className="flex-1 sm:flex-none rounded-xl bg-blue-500 px-4 py-2 text-sm font-semibold text-white text-center transition-all duration-300 hover:bg-blue-600 hover:shadow-md active:scale-95"
                 >
                   Edit
                 </Link>
                 <button
                   onClick={() => deleteTutorial(tutorial._id)}
-                  className="rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition-all duration-300 hover:bg-red-600 hover:shadow-md active:translate-y-px"
+                  className="flex-1 sm:flex-none rounded-xl bg-rose-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-rose-600 hover:shadow-md active:scale-95"
                 >
                   Delete
                 </button>
@@ -720,27 +727,27 @@ const SellerDashboard = () => {
       {error && <div className="bg-red-100 text-red-700 p-4 rounded mb-6">{error}</div>}
 
       <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
-        <aside className="lg:sticky lg:top-6 self-start rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-          <div className="mb-5">
+        <aside className="lg:sticky lg:top-6 self-start rounded-3xl border border-slate-200 bg-white p-4 lg:p-5 shadow-sm">
+          <div className="mb-5 hidden lg:block">
             <h2 className="text-lg font-semibold text-slate-900">Workspace</h2>
             <p className="mt-1 text-sm text-slate-500">Jump between seller tools without a long scroll.</p>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex overflow-x-auto pb-2 gap-2 lg:flex-col lg:overflow-visible lg:pb-0 lg:space-y-2 no-scrollbar">
             {sidebarItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition ${
+                className={`flex items-center justify-between gap-3 rounded-2xl px-4 py-2.5 text-left transition whitespace-nowrap lg:w-full lg:py-3 ${
                   activeTab === item.id
-                    ? "bg-slate-900 text-white"
+                    ? "bg-slate-900 text-white shadow-md shadow-slate-200"
                     : "bg-slate-50 text-slate-700 hover:bg-slate-100"
                 }`}
               >
-                <span className="font-medium">{item.label}</span>
+                <span className="font-medium text-sm lg:text-base">{item.label}</span>
                 {item.badge ? (
                   <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                    activeTab === item.id ? "bg-white/15 text-white" : "bg-white text-slate-600"
+                    activeTab === item.id ? "bg-white/15 text-white" : "bg-white text-slate-600 shadow-sm"
                   }`}>
                     {item.badge}
                   </span>
@@ -749,16 +756,16 @@ const SellerDashboard = () => {
             ))}
           </div>
 
-          <div className="mt-6 rounded-2xl bg-slate-50 p-4">
+          <div className="mt-6 rounded-2xl bg-slate-50 p-4 hidden lg:block">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Quick Links</p>
             <div className="mt-3 space-y-2 text-sm">
-              <Link to="/upload-product" className="block text-slate-700 hover:text-primary-orange">
+              <Link to="/upload-product" className="block text-slate-700 hover:text-primary-orange transition-colors">
                 Add a new product
               </Link>
-              <Link to="/upload-tutorial" className="block text-slate-700 hover:text-primary-orange">
+              <Link to="/upload-tutorial" className="block text-slate-700 hover:text-primary-orange transition-colors">
                 Create a tutorial
               </Link>
-              <Link to="/seller-orders" className="block text-slate-700 hover:text-primary-orange">
+              <Link to="/seller-orders" className="block text-slate-700 hover:text-primary-orange transition-colors">
                 View seller orders
               </Link>
             </div>
