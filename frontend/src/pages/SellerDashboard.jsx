@@ -427,37 +427,37 @@ const SellerDashboard = () => {
           <p>No products yet.</p>
         ) : (
           products.map((product) => (
-            <div key={product._id} className="flex flex-col gap-4 border p-4 rounded-2xl sm:flex-row sm:items-center sm:justify-between">
+            <div key={product._id} className="flex flex-col gap-5 border border-slate-200 p-5 rounded-3xl md:flex-row md:items-center md:justify-between bg-white shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center space-x-4 min-w-0">
-                <img src={getPrimaryImage(product)} alt={product.name} className="w-16 h-16 flex-shrink-0 object-cover rounded" />
+                <img src={getPrimaryImage(product)} alt={product.name} className="w-20 h-20 flex-shrink-0 object-cover rounded-2xl shadow-sm" />
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold truncate text-slate-900">{product.name}</h3>
-                  <p className="text-orange-500 font-medium">{formatPrice(product.price)}</p>
-                  <div className="text-sm text-gray-600 flex flex-wrap gap-x-3 gap-y-1 mt-1">
-                    <span>Stock: {product.stock}</span>
-                    <span>Sold: {product.soldCount || 0}</span>
-                    <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${product.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>
+                  <h3 className="font-bold text-lg text-slate-900 truncate">{product.name}</h3>
+                  <p className="text-orange-600 font-bold text-lg">{formatPrice(product.price)}</p>
+                  <div className="text-sm text-gray-500 flex flex-wrap gap-x-4 gap-y-1 mt-2">
+                    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Stock: {product.stock}</span>
+                    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Sold: {product.soldCount || 0}</span>
+                    <span className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${product.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>
                       {product.status === "active" ? "Active" : "Inactive"}
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto pt-4 md:pt-0 border-t border-slate-100 md:border-0">
                 <button
                   onClick={() => toggleProductStatus(product._id, product.status)}
-                  className={`flex-1 sm:flex-none px-3 py-2 rounded-xl text-white text-sm font-semibold transition-all duration-200 active:scale-95 ${product.status === "active" ? "bg-amber-500 hover:bg-amber-600 shadow-sm shadow-amber-100" : "bg-emerald-500 hover:bg-emerald-600 shadow-sm shadow-emerald-100"}`}
+                  className={`w-full md:w-auto px-5 py-3 rounded-2xl text-white text-sm font-bold transition-all duration-200 active:scale-95 shadow-md ${product.status === "active" ? "bg-amber-500 hover:bg-amber-600 shadow-amber-100" : "bg-emerald-500 hover:bg-emerald-600 shadow-emerald-100"}`}
                 >
                   {product.status === "active" ? "Deactivate" : "Activate"}
                 </button>
                 <Link 
                   to={`/edit-product/${product._id}`} 
-                  className="flex-1 sm:flex-none bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-xl text-center text-sm font-semibold transition-all duration-200 active:scale-95 shadow-sm shadow-blue-100"
+                  className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-2xl text-center text-sm font-bold transition-all duration-200 active:scale-95 shadow-md shadow-blue-100"
                 >
                   Edit
                 </Link>
                 <button 
                   onClick={() => deleteProduct(product._id)} 
-                  className="flex-1 sm:flex-none bg-rose-500 hover:bg-rose-600 text-white px-3 py-2 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-95 shadow-sm shadow-rose-100"
+                  className="w-full md:w-auto bg-rose-600 hover:bg-rose-700 text-white px-5 py-3 rounded-2xl text-sm font-bold transition-all duration-200 active:scale-95 shadow-md shadow-rose-100"
                 >
                   Delete
                 </button>
@@ -484,37 +484,36 @@ const SellerDashboard = () => {
           tutorials.map((tutorial) => (
             <div
               key={tutorial._id}
-              className="group flex flex-col gap-4 rounded-3xl border border-slate-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50/40 hover:shadow-lg sm:flex-row sm:items-center sm:justify-between"
+              className="group flex flex-col gap-5 rounded-3xl border border-slate-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:bg-sky-50/40 hover:shadow-lg md:flex-row md:items-center md:justify-between"
             >
               <div className="flex items-center space-x-4 min-w-0">
-                <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-100 via-blue-50 to-amber-50 text-2xl text-sky-700 transition-transform duration-300 group-hover:scale-110">
+                <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-100 via-blue-50 to-amber-50 text-3xl text-sky-700 transition-transform duration-300 group-hover:scale-110 shadow-sm">
                   T
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-semibold text-slate-900 truncate">{tutorial.title}</h3>
-                    <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
+                    <h3 className="font-bold text-lg text-slate-900 truncate">{tutorial.title}</h3>
+                    <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold text-sky-700 uppercase tracking-wider">
                       {tutorial.category?.name || "Uncategorized"}
                     </span>
                   </div>
-                  <p className="mt-1 text-blue-600 font-medium">{formatPrice(tutorial.price)}</p>
-                  <div className="mt-2 flex flex-wrap gap-3 text-sm text-gray-600">
-                    <span>{tutorial.lessons?.length || 0} lessons</span>
-                    <span className="hidden xs:inline">•</span>
-                    <span>Self-paced content</span>
+                  <p className="mt-1 text-blue-600 font-bold text-lg">{formatPrice(tutorial.price)}</p>
+                  <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-500">
+                    <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>{tutorial.lessons?.length || 0} lessons</span>
+                    <span className="hidden xs:flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>Self-paced content</span>
                   </div>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto pt-4 md:pt-0 border-t border-slate-100 md:border-0">
                 <Link
                   to={`/upload-tutorial?id=${tutorial._id}`}
-                  className="flex-1 sm:flex-none rounded-xl bg-blue-500 px-4 py-2 text-sm font-semibold text-white text-center transition-all duration-300 hover:bg-blue-600 hover:shadow-md active:scale-95"
+                  className="w-full md:w-auto rounded-2xl bg-blue-600 px-6 py-3 text-sm font-bold text-white text-center transition-all duration-300 hover:bg-blue-700 hover:shadow-lg active:scale-95 shadow-md shadow-blue-100"
                 >
                   Edit
                 </Link>
                 <button
                   onClick={() => deleteTutorial(tutorial._id)}
-                  className="flex-1 sm:flex-none rounded-xl bg-rose-500 px-4 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-rose-600 hover:shadow-md active:scale-95"
+                  className="w-full md:w-auto rounded-2xl bg-rose-600 px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:bg-rose-700 hover:shadow-lg active:scale-95 shadow-md shadow-rose-100"
                 >
                   Delete
                 </button>
